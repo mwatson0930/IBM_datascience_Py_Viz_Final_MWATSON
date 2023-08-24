@@ -64,7 +64,7 @@ app.layout = html.Div([
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='select-year', component_property='disabled'),
-    Input(component_id='dropdown-statistics',component_property='disabled'))
+    Input(component_id='dropdown-statistics',component_property='value'))
 
 def update_input_container(selected_statistics):
     if selected_statistics =='Yearly Statistics': 
@@ -76,7 +76,8 @@ def update_input_container(selected_statistics):
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='output-container', component_property='children'),
-    [Input(component_id='select-year', component_property='children'), Input(component_id='dropdown-statistics', component_property='children')])
+    [Input(component_id='select-year', component_property='value'), 
+     Input(component_id='dropdown-statistics', component_property='value')])
 
 
 def update_output_container(selected_statistics, data):
