@@ -76,11 +76,11 @@ def update_input_container(selected_statistics):
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='output-container', component_property='children'),
-    [Input(component_id='select-year', component_property='value'), 
-     Input(component_id='dropdown-statistics', component_property='value')])
+    [Input(component_id='dropdown-statistics', component_property='value'), 
+     Input(component_id='select-year', component_property='value')])
 
 
-def update_output_container(selected_statistics, data):
+def update_output_container(selected_statistics, input_year):
     if selected_statistics == 'Recession Period Statistics':
         # Filter the data for recession periods
         recession_data = data[data['Recession'] == 1]
@@ -134,8 +134,8 @@ def update_output_container(selected_statistics, data):
         )
 
         return [
-            html.Div(className='chart-item', children=[html.Div(children=R_chart1),html.Div(children=R_chart2)],style={'display':'flex'}),
-            html.Div(className='chart-item', children=[html.Div(children=R_chart3),html.Div(children=R_chart4)],style={'display':'flex'})
+            html.Div(className='chart-item', children=[html.Div(children=R_chart1),html.Div(children=R_chart2)]),
+            html.Div(className='chart-item', children=[html.Div(children=R_chart3),html.Div(children=R_chart4)])
             ]
 
 # TASK 2.6: Create and display graphs for Yearly Report Statistics
@@ -146,36 +146,36 @@ def update_output_container(selected_statistics, data):
 #TASK 2.5: Creating Graphs Yearly data
                               
 #plot 1 Yearly Automobile sales using line chart for the whole period.
-        yas= yearly_data.groupby('Year')['Automobile_Sales'].sum().reset_index()
-        Y_chart1 = dcc.Graph(figure=px.line(yas, x="Year", y='Automobile_Sales'), 
-                             title= "Yearly Automobile Sales")
+        yas= data.groupby('Year')['Automobile_Sales'].sum().reset_index()
+        Y_chart1 = dcc.Graph(figure=px.line(yas, x="Year", y='Automobile_Sales', 
+                             title= "Yearly Automobile Sales"))
             
 # Plot 2 Total Monthly Automobile sales using line chart.
         mas = yearly_data.groupby('Month')['Automobile_Sales'].sum().reset_index()
-        Y_chart2 = dcc.Graph(figure=px.line(mas, x='Month', y='Automobile_Sales'), 
-                             title="Total Monthly Automobile Sales")
+        Y_chart2 = dcc.Graph(figure=px.line(mas, x='Month', y='Automobile_Sales', 
+                             title="Total Monthly Automobile Sales"))
 
 # Plot bar chart for average number of vehicles sold during the given year
         avr_vdata=yearly_data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()
         Y_chart3 = dcc.Graph(figure=px.bar(avr_vdata, 
                                            x="Vehicle_Type", 
                                            y="Automobile_Sales", 
-                                           color="Vehicle_Type"), 
-                             title='Average Vehicles Sold by Vehicle Type in the year {}'.format("Year")
+                                           color="Vehicle_Type", 
+                             title='Average Vehicles Sold by Vehicle Type in the year {}'.format("Year"))
                              )
 
 # Total Advertisement Expenditure for each vehicle using pie chart
         exp_data = yearly_data.groupby('Vehicle_Type')['Advertising_Expenditure'].sum().reset_index()
         Y_chart4 = dcc.Graph(figure = px.pie(exp_data, 
                                              values="Advertising_Expenditure", 
-                                             names="Vehicle_Type"),
+                                             names="Vehicle_Type",
                              title="Ads Expense per Vehicle Type"
-                             )
+                             ))
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
         return [
-                html.Div(className='chart-item', children=[html.Div(Y_chart1),html.Div(Y_chart2)],style={'display':'flex'}),
-                html.Div(className='chart-item', children=[html.Div(Y_chart3),html.Div(Y_chart4)],style={'display':'flex'})
+                html.Div(className='chart-item', children=[html.Div(Y_chart1),html.Div(Y_chart2)]),
+                html.Div(className='chart-item', children=[html.Div(Y_chart3),html.Div(Y_chart4)])
                 ]
         
     else:
